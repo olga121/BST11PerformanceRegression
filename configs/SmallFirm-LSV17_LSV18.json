@@ -1,0 +1,68 @@
+{
+	"general": {
+		"domain": "bsttest1",
+		"domainExtension": ".net",
+        "performanceWebAppEnvironment": "LSV17_18"
+	},
+	"servers": {
+		"deploymentDirectory": "C$/Blazor_PerfDeployment",
+		"deploymentDirectoryLocal": "C:/Blazor_PerfDeployment",
+		"webServer": [],
+		"appServer": [
+			{
+				"name": "MC-QA-LSV18.bsttest1.net",
+				"sessionId": 0,
+				"dotnetCounterSessions": [],
+				"systemCounters": [
+					{
+						"script":"system-counters.ps1"
+					}
+				]	
+			}
+		],
+		"dbServer": [
+			{
+				"name": "MC-QA-LSV17.bsttest1.net",
+				"databaseName": "DevDB",
+				"sessionId": 0,
+				"dotnetCounterSessions": [],
+				"systemCounters": [
+					{
+						"script":"system-counters.ps1"
+					}
+				]
+			}
+		],
+		"additionalServer": []
+	},
+	"agents": 
+	{
+		"deploymentDirectory": "C$/Blazor_PerfDeployment",
+		"deploymentDirectoryLocal": "C:/Blazor_PerfDeployment",
+		"ignitor":
+		{
+			"launchScript": "START_IgnitorClient.ps1"
+		},
+		"machines": [
+			{
+				"name": "MC-QALCL50.bsttest1.net",
+				"sessionId": 0
+			},
+			{
+				"name": "MC-QALCL51.bsttest1.net",
+				"sessionId": 0
+			},
+			{
+				"name": "MC-QALCL52.bsttest1.net",
+				"sessionId": 0
+			}
+		]
+	},
+	"azuread":
+	{
+		"Instance": "https://login.microsoftonline.com/",
+		"Domain": "bsttest1.net",
+		"TenantId": "ff331da3-3cd0-40c6-932f-ba560425d8b2",
+		"ClientId": "d3c2b027-322b-498a-b8c5-d5cca5f7c69b"
+	}
+}
