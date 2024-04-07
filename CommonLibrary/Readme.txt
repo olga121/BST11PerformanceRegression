@@ -1,1 +1,0 @@
-This folder is maintained  for the scripts, meta-data and utilities that's used across all types of tests

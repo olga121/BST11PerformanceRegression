@@ -1,0 +1,103 @@
+{
+	"general": {
+		"domain": "bsttest1",
+		"domainExtension": ".net",
+        "performanceWebAppEnvironment": "LSV21_23"
+	},
+	"servers": {
+		"deploymentDirectory": "C$/Blazor_PerfDeployment",
+		"deploymentDirectoryLocal": "C:/Blazor_PerfDeployment",
+		"webServer": [
+            {
+				"name": "mc-qa-lsv21.bsttest1.net",
+				"siteHostName": "https://qaperfweb21.bstglobal.com/web/",
+				"webServerUrl": "https://qaperfweb21.bstglobal.com/web/",
+				"sessionId": 0,
+				"w3wp_ProcessId": 0,
+				"skipw3wpCollection": false,
+				"dotnetCounterSessions": [
+				{
+					"logname": "runtime_w3wp",
+					"script": "dotnet-counters_runtime.ps1",
+					"stopscript": "STOP_dotnet-counters.ps1",
+					"collectorProcessId": 0,
+					"apppoolName": "BSTGlobalWebApp",
+					"processId": 0
+				},
+				{
+					"logname": "connections_w3wp",
+					"script": "dotnet-counters_connections.ps1",
+					"stopscript": "STOP_dotnet-counters.ps1",
+					"collectorProcessId": 0,
+					"apppoolName": "BSTGlobalWebApp",
+					"processId": 0
+				},
+				{
+					"logname": "hosting_w3wp",
+					"script": "dotnet-counters_hosting.ps1",
+					"stopscript": "STOP_dotnet-counters.ps1",
+					"collectorProcessId": 0,
+					"apppoolName": "BSTGlobalWebApp",
+					"processId": 0
+				}],
+				"systemCounters": []
+			}
+        ],
+		"appServer": [
+			{
+				"name": "MC-QA-LSV21.bsttest1.net",
+				"sessionId": 0,
+				"dotnetCounterSessions": [],
+				"systemCounters": [
+					{
+						"script":"system-counters.ps1"
+					}
+				]	
+			}
+		],
+		"dbServer": [
+			{
+				"name": "MC-QA-LSV23.bsttest1.net",
+				"databaseName": "DevDB",
+				"sessionId": 0,
+				"dotnetCounterSessions": [],
+				"systemCounters": [
+					{
+						"script":"system-counters.ps1"
+					}
+				]
+			}
+		],
+		"additionalServer": []
+	},
+	"agents": 
+	{
+		"deploymentDirectory": "C$/Blazor_PerfDeployment",
+		"deploymentDirectoryLocal": "C:/Blazor_PerfDeployment",
+		"ignitor":
+		{
+			"launchScript": "START_IgnitorClient.ps1"
+		},
+		"machines": [
+			{
+				"name": "MC-QALCL50.bsttest1.net",
+				"sessionId": 0
+			},
+			{
+				"name": "MC-QALCL51.bsttest1.net",
+				"sessionId": 0
+			},
+			{
+				"name": "MC-QALCL52.bsttest1.net",
+				"sessionId": 0
+			}
+		]
+	},
+	"azuread":
+	{
+		"Instance": "https://login.microsoftonline.com/",
+		"Domain": "bsttest1.net",
+		"TenantId": "ff331da3-3cd0-40c6-932f-ba560425d8b2",
+		"ClientId": "ToBeFilledAfterWebAppInstall"
+	}
+}
