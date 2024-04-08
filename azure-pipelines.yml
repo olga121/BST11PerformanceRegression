@@ -15,23 +15,23 @@ name: Release-$(Rev:r)
 
 parameters:
   - name: run_RestoreDatabase
-    displayName: Run Restore Database
+    displayName: Run_Restore_Database
     type: boolean
     default: True
   - name: run_CleaningScripts
-    displayName: Run Prebills cleaning
+    displayName: Run_Prebills_cleaning
     type: boolean
     default: True
   - name: run_RebuildIndexes
-    displayName: Rebuild Indexes
+    displayName: Rebuild_Indexes
     type: boolean
     default: True
   - name: update_Statistics
-    displayName: Update Statistics
+    displayName: Update_Statistics
     type: boolean
     default: True
   - name: run_PrebillsFinalBillsGeneration
-    displayName: Run Prebills/FinalBills Generation
+    displayName: Run_Prebills/FinalBills_Generation
     type: boolean
     default: True
   - name: template
@@ -43,7 +43,7 @@ parameters:
      - SmallFirm-LSV21_23.json
      - SmallFirm-LSV10_11.json
   - name: dbName
-    dispayName: OLTP Database 
+    dispayName: OLTP_Database 
     default: DevDB
     values:
      - DevDB
@@ -52,10 +52,10 @@ parameters:
     type: string
     default: 1000 Prebills Generation
   - name: iterations
-    dispalyName: Number of Iterations
+    dispalyName: Number_of_Iterations'
     default: 1
   - name: Test_scenario
-    displayName: Test Scenario
+    displayName: Test_Scenario
     default: 1000PrebillsGeneration
     values:
      - 1000PrebillsGeneration
@@ -63,7 +63,7 @@ parameters:
      - 100_Small_to_Large_PrebillsGeneration
      - 100FinalBillsGeneration
   - name: CollectAzureMetrics
-    displayName: Collect AzureMe trics
+    displayName: Collect_AzureMe_Metrics
     type: boolean
     default: True
   
@@ -86,8 +86,12 @@ variables:
   displayName: 'FromDatagenOnly when Cleaning? 1 - Yes, 0 - No'
   type: strign
   default: '0' 
-
-
+- name: backupDirectory
+  displayName: 'Enter the Database Backup Location'
+  default: E:\MSSQL\Backup\
+- name: backupFileName
+  displayName: 'Enter the Backup File Name'
+  default: DevDB_
 
 stages:
 #############
@@ -106,7 +110,7 @@ stages:
       inputs: 
         targetType: 'filePath'
         filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RestoreDatabase.ps1'
-        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
+        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(variables.backupDirectory)" -backUpFileName "$(variables.backupFileName)'
         pwsh: true
 
   - job: CleanPrebillsFinalBills
