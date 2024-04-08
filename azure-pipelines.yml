@@ -89,12 +89,9 @@ jobs:
 #############
 - job:  SetUpStage  
   displayName: SetUp_Stage
-  workspace:
-    clean: all
   steps: 
   - checkout: perf
     path: perf
-  - download: none 
 
 # RESTORE DATABASE
   - task: PowerShell@2
