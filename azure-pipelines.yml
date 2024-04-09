@@ -13,10 +13,10 @@ parameters:
     default: True
   - name: backupDirectory
     displayName: Backup_Directory
-    default: E:\MSSQL\Backup\
+    default: E:\MSSQL\Backup\4.0.0.833
   - name: backupFileName
     displayName: Backup_File_Name
-    default: DevDB_
+    default: DevDB_4.0.0.833.bak
   - name: run_CleaningScripts
     displayName: Run_Prebills_cleaning
     type: boolean
