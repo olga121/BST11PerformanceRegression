@@ -99,7 +99,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }})
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RestoreDatabase.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/Utility/SQL_RestoreDatabase.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)'
       pwsh: true
 
@@ -109,7 +109,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.run_CleaningScripts, true) }})
     inputs:
      targetType: 'filePath'
-     filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_CleanPrebillsFinalBills.ps1'
+     filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/Utility/SQL_CleanPrebillsFinalBills.ps1'
      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
      pwsh: true
 
@@ -119,7 +119,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.run_RebuildIndexes, true) }})
     inputs: 
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RebuildIndexes.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/Utility/SQL_RebuildIndexes.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
       pwsh: true
 
@@ -129,7 +129,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.update_Statistics, true) }})
     inputs: 
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_UpdateStatistics.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/Utility/SQL_UpdateStatistics.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
       pwsh: true
 
@@ -149,7 +149,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '1000 Prebills Generation') }})
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_PrebillsGeneration.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/PrebillProcess/SQL_PrebillsGeneration.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB1000-1_Valid)"'
       pwsh: true
 
@@ -159,7 +159,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100_Small_to_Average_PrebillsGeneration') }})
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_PrebillsGeneration.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/PrebillProcess/SQL_PrebillsGeneration.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB100-01)" '
       pwsh: true
 
@@ -169,7 +169,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100_Small_to_Large_PrebillsGeneration') }})
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_PrebillsGeneration.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/PrebillProcess/SQL_PrebillsGeneration.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB100-07)" '
       pwsh: true
 
@@ -179,7 +179,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100FinalBillsGeneration') }})
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_FinalBillsGeneration.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/PrebillProcess/SQL_FinalBillsGeneration.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(FB100-01)" -RequiredState "$(Submit)" '
       pwsh: true
 
@@ -196,7 +196,7 @@ jobs:
   - task: PowerShell@2
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_CollectAzureMetrics.ps1'
+      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/PrebillProcess/SQL_CollectAzureMetrics.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -ClientDBName "$(parameters.dbName)" -startTime  "$(collect_azure_metrics_startTime)" -endTime  "$(collect_azure_metrics_endTime)" -testName  "${{ parameters.Test_scenario }}" '
       pwsh: true
 
