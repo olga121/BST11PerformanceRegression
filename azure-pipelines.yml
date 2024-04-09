@@ -99,7 +99,7 @@ jobs:
     condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }})
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/BST11PERF-REG/Utility/SQL_RestoreDatabase.ps1'
+      filePath: '$(Agent.BuildDirectory)/Utility/SQL_RestoreDatabase.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)'
       pwsh: true
 
