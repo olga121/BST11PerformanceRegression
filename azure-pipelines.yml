@@ -46,8 +46,7 @@ parameters:
     values: 
      - SmallFirm-LSV17_18.json
      - SmallFirm-LSV09_08.json
-     - SmallFirm-LSV21_23.json
-     - SmallFirm-LSV10_11.json
+     - -- placeholder--
   - name: dbName
     displayName: OLTP_Database 
     default: DevDB
@@ -76,7 +75,7 @@ parameters:
 
 
 variables:
-- group: 'Secret_variables'
+- group: Secret_variables
   name: User
   value: ${{Secret_variables.User}}
 - name: Password
