@@ -100,7 +100,7 @@ jobs:
     inputs:
       targetType: 'filePath'
       filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RestoreDatabase.ps1'
-      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' -User $(User) -Password $(Password)
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' -User "$(User)" -Password "$(Password)"
       pwsh: true
 
 # CLEAN PREBILLS/FINAL BILLS
