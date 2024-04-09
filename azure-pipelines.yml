@@ -7,9 +7,9 @@ trigger: none
 
 resources:
   repositories:
-  - repository: BST11PERF-REG
+  - repository: perf
     type: git
-    name: BST11 Performance Regression
+    name: BST11PERF-REG\BST11 Performance Regression
     
 name: Release-$(Rev:r)
 
