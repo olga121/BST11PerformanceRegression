@@ -9,7 +9,7 @@ resources:
   repositories:
   - repository: perf
     type: git
-    name: bst11-perf
+    name: perf
 
 name: Release-$(Rev:r)
 
