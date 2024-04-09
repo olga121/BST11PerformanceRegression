@@ -7,9 +7,9 @@ trigger: none
 
 resources:
   repositories:
-  - repository: perf
+  - repository: BST11perf
     type: git
-    name: BST11 Performance Regression
+    name: BST11/bst11-perf
 
 name: Release-$(Rev:r)
 
@@ -90,8 +90,6 @@ jobs:
 - job:  SetUpStage  
   displayName: SetUp_Stage
   steps: 
-  - checkout: perf
-    path: perf
 
 # RESTORE DATABASE
   - task: PowerShell@2
@@ -142,8 +140,6 @@ jobs:
   dependsOn:
   - SetUpStage
   steps: 
-  - checkout: perf
-    path: perf
 
 # 1000 Prebills Generation
   - task: PowerShell@2
@@ -194,8 +190,6 @@ jobs:
   dependsOn:
   - PrebillsFinalBillsGeneration
   steps: 
-  - checkout: perf
-    path: perf
 
   - task: PowerShell@2
     inputs:
