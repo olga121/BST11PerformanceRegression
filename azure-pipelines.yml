@@ -76,7 +76,7 @@ parameters:
 
 
 variables:
-- group: 'Secrets_${{ parameters.environmentName}}'
+- group: 'Secret_variables'
 - name: Cleaning_DocumentNbr_Like
   value: 'DGEN'
 - name:  Cleaning_RebuildIndexes
@@ -101,7 +101,7 @@ jobs:
     inputs:
       targetType: 'filePath'
       filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RestoreDatabase.ps1'
-      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' -User ${{variables.User}} -Password ${{variables.Password}}
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' -User ${{variables.SecretVariables.User}} -Password ${{variables.SecretVariables.Password}}
       pwsh: true
 
 # CLEAN PREBILLS/FINAL BILLS
