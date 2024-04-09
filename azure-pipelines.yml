@@ -18,6 +18,12 @@ parameters:
     displayName: Run_Restore_Database
     type: boolean
     default: True
+  - name: backupDirectory
+    displayName: Backup_Directory
+    default: E:\MSSQL\Backup\
+  - name: backupFileName
+    displayName: Backup_File_Name
+    default: DevDB_
   - name: run_CleaningScripts
     displayName: Run_Prebills_cleaning
     type: boolean
@@ -78,10 +84,6 @@ variables:
   value: '0'
 - name:  Cleaning_FromDatagenOnly
   value: '0' 
-- name: backupDirectory
-  value: E:\MSSQL\Backup\
-- name: backupFileName
-  value: DevDB_
 
 jobs:
 #############
@@ -98,7 +100,7 @@ jobs:
     inputs:
       targetType: 'filePath'
       filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RestoreDatabase.ps1'
-      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(variables.backupDirectory)" -backUpFileName "$(variables.backupFileName)'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)'
       pwsh: true
 
 # CLEAN PREBILLS/FINAL BILLS
