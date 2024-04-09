@@ -9,7 +9,7 @@ resources:
   repositories:
   - repository: perf
     type: git
-    name: BST11PERF-REG/BST11 Performance Regression
+    name: BST11 Performance Regression
     
 name: Release-$(Rev:r)
 
