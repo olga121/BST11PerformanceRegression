@@ -7,7 +7,7 @@ trigger: none
 
 resources:
   repositories:
-  - repository: perf
+  - repository: BST11PERF-REG
     type: git
     name: BST11 Performance Regression
 
