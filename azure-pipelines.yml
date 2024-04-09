@@ -5,13 +5,6 @@
 
 trigger: none
 
-resources:
-  repositories:
-  - repository: BST11PERF-REG
-    type: git
-    name: BST11 Performance Regression
-
-name: Release-$(Rev:r)
 
 parameters:
   - name: run_RestoreDatabase
