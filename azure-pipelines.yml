@@ -92,6 +92,10 @@ jobs:
 - job:  SetUpStage  
   displayName: SetUp_Stage
   steps: 
+  - checkout: self
+    path: self
+  - download: none
+    continueOnError: false
 
 # RESTORE DATABASE
   - task: PowerShell@2
@@ -142,6 +146,10 @@ jobs:
   dependsOn:
   - SetUpStage
   steps: 
+  - checkout: self
+    path: self
+  - download: none
+    continueOnError: false
 
 # 1000 Prebills Generation
   - task: PowerShell@2
@@ -191,7 +199,11 @@ jobs:
   condition: and(not(canceled()), ${{ eq(parameters.CollectAzureMetrics, true) }})
   dependsOn:
   - PrebillsFinalBillsGeneration
-  steps: 
+  steps:
+  - checkout: self
+    path: self
+  - download: none
+    continueOnError: false 
 
   - task: PowerShell@2
     inputs:
