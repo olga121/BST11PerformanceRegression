@@ -102,9 +102,11 @@ jobs:
     displayName: 'Restore Database running'
     condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }})
     inputs:
+      targetType: 'inline'
+      script: # use 
       targetType: 'filePath'
       filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_RestoreDatabase.ps1'
-      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' -User "$(User)" -Password "$(Password)"
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' #-User "$(User)" -Password "$(Password)"
       pwsh: true
 
 # CLEAN PREBILLS/FINAL BILLS
