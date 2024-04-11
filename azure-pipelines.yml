@@ -100,10 +100,7 @@ jobs:
 # RESTORE DATABASE
   - task: PowerShell@2
     displayName: 'Restore Database running'
-    condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }})
-    inputs:
-      targetType: 'inline'
-      script: # use 
+    condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }}) 
       targetType: 'filePath'
       filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_RestoreDatabase.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' #-User "$(User)" -Password "$(Password)"
