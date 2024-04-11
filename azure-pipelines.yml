@@ -101,10 +101,11 @@ jobs:
   - task: PowerShell@2
     displayName: 'Restore Database running'
     condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }}) 
-      targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_RestoreDatabase.ps1'
-      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' #-User "$(User)" -Password "$(Password)"
-      pwsh: true
+    inputs:
+     targetType: 'filePath'
+     filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_RestoreDatabase.ps1'
+     arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' #-User "$(User)" -Password "$(Password)"
+     pwsh: true
 
 # CLEAN PREBILLS/FINAL BILLS
   - task: PowerShell@2
