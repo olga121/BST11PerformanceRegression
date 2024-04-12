@@ -7,10 +7,10 @@ trigger: none
 
 resources:
   repositories:
-  - repository: perf
+  - repository: self
     type: git
     name: BST11 Performance Regression
-
+    
 name: Release-$(Rev:r)
 
 parameters:
@@ -18,6 +18,12 @@ parameters:
     displayName: Run_Restore_Database
     type: boolean
     default: True
+  - name: backupDirectory
+    displayName: Backup_Directory
+    default: E:\MSSQL\Backup\4.0.0.833
+  - name: backupFileName
+    displayName: Backup_File_Name
+    default: DevDB_4.0.0.833.bak
   - name: run_CleaningScripts
     displayName: Run_Prebills_cleaning
     type: boolean
@@ -40,10 +46,9 @@ parameters:
     values: 
      - SmallFirm-LSV17_18.json
      - SmallFirm-LSV09_08.json
-     - SmallFirm-LSV21_23.json
-     - SmallFirm-LSV10_11.json
+     - -- placeholder--
   - name: dbName
-    dispayName: OLTP_Database 
+    displayName: OLTP_Database 
     default: DevDB
     values:
      - DevDB
@@ -52,7 +57,7 @@ parameters:
     type: string
     default: 1000 Prebills Generation
   - name: iterations
-    dispalyName: Number_of_Iterations'
+    displayName: Number_of_Iterations
     default: 1
   - name: Test_scenario
     displayName: Test_Scenario
@@ -70,148 +75,140 @@ parameters:
 
 
 variables:
+- group: Secret_variables
 - name: Cleaning_DocumentNbr_Like
-  displayName: 'DocumentNbr_Like when Cleaning documents'
-  type: string
-  default: 'DGEN'
+  value: 'DGEN'
 - name:  Cleaning_RebuildIndexes
-  displayName: 'RebuildIndexes when Cleaning? 1 - Yes, 0 - No'
-  type: strign
-  default: '0'
+  value: '0'
 - name:  Cleaning_UpdateStatistics
-  displayName: 'UpdateStatistics when Cleaning? 1 - Yes, 0 - No'
-  type: strign
-  default: '0'
+  value: '0'
 - name:  Cleaning_FromDatagenOnly
-  displayName: 'FromDatagenOnly when Cleaning? 1 - Yes, 0 - No'
-  type: strign
-  default: '0' 
-- name: backupDirectory
-  displayName: 'Enter the Database Backup Location'
-  default: E:\MSSQL\Backup\
-- name: backupFileName
-  displayName: 'Enter the Backup File Name'
-  default: DevDB_
+  value: '0' 
 
-stages:
+jobs:
 #############
 # SetUp Stage
 #############
-- stage:  SetUP Stage  
-  displayName: SetUp Stage  
+- job:  SetUpStage  
+  displayName: SetUp_Stage
+  steps: 
+  - checkout: self
+    path: self
+  - download: none
+    continueOnError: false
 
-  jobs:
-  - job: RestoreDatabase
-    displayName: Restoring Database
-    condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }})
-    steps: 
-    - task: PowerShell@2
-      displayName: 'Restore Database running'
-      inputs: 
-        targetType: 'filePath'
-        filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RestoreDatabase.ps1'
-        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(variables.backupDirectory)" -backUpFileName "$(variables.backupFileName)'
-        pwsh: true
+# RESTORE DATABASE
+  - task: PowerShell@2
+    displayName: 'Restore Database running'
+    condition: and(not(canceled()), ${{ eq(parameters.run_RestoreDatabase, true) }}) 
+    inputs:
+     targetType: 'filePath'
+     filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_RestoreDatabase.ps1'
+     arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)" -backupDirectory "$(parameters.backupDirectory)" -backUpFileName "$(parameters.backupFileName)' #-User "$(User)" -Password "$(Password)"
+     pwsh: true
 
-  - job: CleanPrebillsFinalBills
+# CLEAN PREBILLS/FINAL BILLS
+  - task: PowerShell@2
     displayName: 'Clean Prebills/Final Bills'
     condition: and(not(canceled()), ${{ eq(parameters.run_CleaningScripts, true) }})
-    steps: 
-    - task: PowerShell@2
-      displayName: 'Clean Prebills and Final Bills running'
-      inputs: 
-        targetType: 'filePath'
-        filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_CleanPrebillsFinalBills.ps1'
-        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
-        pwsh: true
+    inputs:
+     targetType: 'filePath'
+     filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_CleanPrebillsFinalBills.ps1'
+     arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
+     pwsh: true
 
-  - job: RebuildIndexes
-    displayName: ' Rebuild Indexes'
+# REBUILD INDEXES
+  - task: PowerShell@2
+    displayName: 'Rebuild Indexes'
     condition: and(not(canceled()), ${{ eq(parameters.run_RebuildIndexes, true) }})
-    steps:
-    - task: PowerShell@2
-      displayName: 'Rebuild Indexes running'
-      inputs: 
-        targetType: 'filePath'
-        filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_RebuildIndexes.ps1'
-        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
-        pwsh: true
+    inputs: 
+      targetType: 'filePath'
+      filePath: '$(Agent.BuildDirectory)/self/Utility/SQL_RebuildIndexes.ps1'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
+      pwsh: true
 
-  - job: UpdateStatistics
+# UPDATE STATISTICS
+  - task: PowerShell@2
     displayName: 'Update Statiscis'
     condition: and(not(canceled()), ${{ eq(parameters.update_Statistics, true) }})
-    steps:
-    - task: PowerShell@2
-      displayName: 'Update Statistics running'
-      inputs: 
-        targetType: 'filePath'
-        filePath: '$(Agent.BuildDirectory)/perf/Utility/SQL_UpdateStatistics.ps1'
-        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
-        pwsh: true
+    inputs: 
+      targetType: 'filePath'
+      filePath: '$(Agent.BuildDirectory)/self/SQL_UpdateStatistics.ps1'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.template)"'
+      pwsh: true
 
 #########################
 # RUN Prebills/FinalBills Generation
 #########################
-- stage: Generate Prebills/Finalbills
-  displayName: 'Generate Prebills/Finalbills'
+- job: PrebillsFinalBillsGeneration
+  displayName: Generate Prebills/Finalbills
   condition: and(not(canceled()), ${{ eq(parameters.run_PrebillsFinalBillsGeneration, true) }})
+  dependsOn:
+  - SetUpStage
+  steps: 
+  - checkout: self
+    path: self
+  - download: none
+    continueOnError: false
 
-  jobs:
-  - job: 1000PrebillsGeneration
+# 1000 Prebills Generation
+  - task: PowerShell@2
+    displayName: 1000_Prebills_Generation
     condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '1000 Prebills Generation') }})
-    steps:
-    - task: PowerShell@2
-      displayName: '1000 Prebills Generation'
-      inputs:
-        targetType: 'filePath'
-        filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_PrebillsGeneration.ps1'
-        arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB1000-1_Valid)"'
-        pwsh: true
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Agent.BuildDirectory)/self/PrebillProcess/SQL_PrebillsGeneration.ps1'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB1000-1_Valid)"'
+      pwsh: true
 
-    - job: 100_Small_to_Average_PrebillsGeneration
-      condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100_Small_to_Average_PrebillsGeneration') }})
-      steps:
-      - task: PowerShell@2
-        displayName: '100_Small_to_Average_PrebillsGeneration'
-        inputs:
-          targetType: 'filePath'
-          filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_PrebillsGeneration.ps1'
-          arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB100-01)" '
-          pwsh: true
+# 100_Small_to_Average_Prebills 
+  - task: PowerShell@2
+    displayName: '100_Small_to_Average_PrebillsGeneration'
+    condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100_Small_to_Average_PrebillsGeneration') }})
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Agent.BuildDirectory)/self/PrebillProcess/SQL_PrebillsGeneration.ps1'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB100-01)" '
+      pwsh: true
 
-    - job: 100_Small_to_Large_PrebillsGeneration
-      condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100_Small_to_Large_PrebillsGeneration') }})
-      steps:
-      - task: PowerShell@2
-        displayName: '100_Small_to_Large_PrebillsGeneration'
-        inputs:
-          targetType: 'filePath'
-          filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_PrebillsGeneration.ps1'
-          arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB100-07)" '
-          pwsh: true
+# 100_Small_to_Large_Prebills
+  - task: PowerShell@2
+    displayName: '100_Small_to_Large_PrebillsGeneration'
+    condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100_Small_to_Large_PrebillsGeneration') }})
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Agent.BuildDirectory)/self/PrebillProcess/SQL_PrebillsGeneration.ps1'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(PB100-07)" '
+      pwsh: true
 
-    - job: 100FinalBillsGeneration
-      condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100FinalBillsGeneration') }})
-      steps:
-      - task: PowerShell@2
-        displayName: '100 FinalBills Generation'
-        inputs:
-          targetType: 'filePath'
-          filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_FinalBillsGeneration.ps1'
-          arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(FB100-01)" -RequiredState "$(Submit)" '
-          pwsh: true
+# 100 FinalBills Generation
+  - task: PowerShell@2
+    displayName: '100 FinalBills Generation'
+    condition: and(not(canceled()), ${{ eq(parameters.Test_scenario, '100FinalBillsGeneration') }})
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Agent.BuildDirectory)/self/PrebillProcess/SQL_FinalBillsGeneration.ps1'
+      arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -TemplateFile "$(parameters.Template)" -TestScenario "parameters.Test_scenario" -DocumentNbr_From "$(FB100-01)" -RequiredState "$(Submit)" '
+      pwsh: true
 
 ############## 
 # Collect Metrics
 ###############
-- stage: CollectAzureMetrics
+- job: CollectMetrics
   displayName: Collect Azure Metrics 
-  condition: and(not(canceled()), ${{ eq(parameters.run_CollectAzureMetrics, true) }})
+  condition: and(not(canceled()), ${{ eq(parameters.CollectAzureMetrics, true) }})
+  dependsOn:
+  - PrebillsFinalBillsGeneration
   steps:
+  - checkout: self
+    path: self
+  - download: none
+    continueOnError: false 
+
   - task: PowerShell@2
     inputs:
       targetType: 'filePath'
-      filePath: '$(Agent.BuildDirectory)/perf/PrebillProcess/SQL_CollectAzureMetrics.ps1'
+      filePath: '$(Agent.BuildDirectory)/self/PrebillProcess/SQL_CollectAzureMetrics.ps1'
       arguments: '-WorkspaceDirectory "$(Pipeline.Workspace)" -ClientDBName "$(parameters.dbName)" -startTime  "$(collect_azure_metrics_startTime)" -endTime  "$(collect_azure_metrics_endTime)" -testName  "${{ parameters.Test_scenario }}" '
       pwsh: true
 

@@ -6,7 +6,7 @@ param
 )
 
 #LOAD CONFIG FILE
-$configFilePath=([System.IO.Path]::Combine($WorkspaceDirectory, "perf", "configs", $TemplateFile))
+$configFilePath=([System.IO.Path]::Combine($WorkspaceDirectory, "self", "configs", $TemplateFile))
 $config=Get-Content $configFilePath | Out-String | ConvertFrom-Json
 
 #UPDATE STATS SCRIPT

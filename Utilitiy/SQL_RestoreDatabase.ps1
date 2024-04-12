@@ -28,7 +28,7 @@ function Test-Admin {
   Write-Output 'running with full privileges'
 
 #LOAD CONFIG FILE
-$configFilePath=([System.IO.Path]::Combine($WorkspaceDirectory, "perf", "configs", $TemplateFile))
+$configFilePath=([System.IO.Path]::Combine($WorkspaceDirectory, "self", "configs", $TemplateFile))
 $config=Get-Content $configFilePath | Out-String | ConvertFrom-Json
 
 #GET TARGET SERVER AND DATABASE
